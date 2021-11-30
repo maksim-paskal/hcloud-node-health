@@ -1,0 +1,28 @@
+dockers:
+- goos: linux
+  goarch: amd64
+  image_templates:
+  - paskalmaksim/hcloud-node-health:latest
+  - paskalmaksim/hcloud-node-health:{{ .Tag }}
+builds:
+- dir: ./cmd
+  env:
+  - CGO_ENABLED=0
+  flags:
+  - -trimpath
+  ldflags:
+  - -X github.com/maksim-paskal/hcloud-node-health/pkg/config.gitVersion={{.Version}}-{{.ShortCommit}}-{{.Timestamp}}
+  goos:
+  - linux
+  goarch:
+  - amd64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
